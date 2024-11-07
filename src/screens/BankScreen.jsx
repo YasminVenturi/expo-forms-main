@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Surface, Text, Button } from 'react-native-paper';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { getAuth } from 'firebase/auth'; 
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { getAuth } from 'firebase/auth'; 
 import app from '../config/firebase'; 
 
 const auth = getAuth(app); 
@@ -33,24 +33,34 @@ export default function BankScreen({ navigation }) {
   return (
     <Surface style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {/* Cabeçalho */}
         <View style={styles.header}>
-          <Text style={styles.companyName}>UnicForm</Text>
-        </View>
-        <View style={styles.accountContainer}>
-          <Text style={styles.accountLabel}>Conta</Text>
+          <Text style={styles.greeting}>Hi,</Text>
           <Text style={styles.balance}>R$ {balance.toFixed(2)}</Text>
+          <Text style={styles.balanceLabel}>Available Balance</Text>
+          <TouchableOpacity style={styles.sendButton}>
+            <MaterialCommunityIcons name="arrow-right" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
+
+
+        {/* Botões de Ação */}
         <View style={styles.actionContainer}>
-          <Button mode="text" icon="bank-transfer" onPress={() => navigation.navigate("PixScreen")}>
-            Área Pix
-          </Button>
-          <Button mode="text" icon="barcode" onPress={() => navigation.navigate("ScannerScreen")}>
-            Pagar
-          </Button>
-          <Button mode="text" icon="arrow-right-bold" onPress={() => navigation.navigate("TransferirScreen")}>
-            Transferir
-          </Button>
+          <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate("PixScreen")}>
+            <MaterialCommunityIcons name="bank-transfer" size={28} color="#fff" />
+            <Text style={styles.actionButtonLabel}>Área Pix</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate("ScannerScreen")}>
+            <MaterialCommunityIcons name="barcode" size={28} color="#fff" />
+            <Text style={styles.actionButtonLabel}>Pagar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate("TransferirScreen")}>
+            <MaterialCommunityIcons name="arrow-right-bold" size={28} color="#fff" />
+            <Text style={styles.actionButtonLabel}>Transferir</Text>
+          </TouchableOpacity>
         </View>
+
+        {/* Cartão de Crédito */}
         <View style={styles.cardContainer}>
           <Text style={styles.cardLabel}>Cartão de crédito</Text>
           <Text style={styles.cardBalance}>Fatura atual</Text>
@@ -59,30 +69,30 @@ export default function BankScreen({ navigation }) {
         </View>
       </ScrollView>
 
-      {/* Rodapé adicionado */}
+      {/* Rodapé */}
       <View style={styles.footer}>
         <Button
           onPress={() => navigation.navigate("EventsScreen")}
           mode="contained"
-          style={styles.button}
+          style={styles.footerButton}
         >
-          <MaterialCommunityIcons name="calendar" size={24} color="#a547bf" />
+          <MaterialCommunityIcons name="calendar" size={24} color="#8a2be2" />
         </Button>
 
         <Button
           onPress={() => navigation.navigate("HomeScreen")}
           mode="contained"
-          style={styles.button}
+          style={styles.footerButton}
         >
-          <MaterialCommunityIcons name="home" size={24} color="#a547bf" />
+          <MaterialCommunityIcons name="home" size={24} color="#8a2be2" />
         </Button>
 
         <Button
           onPress={() => navigation.navigate("BankScreen")}
           mode="contained"
-          style={styles.button}
+          style={styles.footerButton}
         >
-          <MaterialCommunityIcons name="bank" size={24} color="#a547bf" />
+          <MaterialCommunityIcons name="bank" size={24} color="#8a2be2" />
         </Button>
       </View>
     </Surface>
@@ -92,43 +102,67 @@ export default function BankScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
   },
   scrollViewContent: {
     padding: 20,
-    paddingBottom: 80, 
+    paddingBottom: 80,
   },
   header: {
-    backgroundColor: '#a547bf',
+    backgroundColor: '#a767c6',
     padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 20,
+    alignItems: 'center',
+    position: 'relative',
   },
-  companyName: {
+  greeting: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  accountContainer: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  accountLabel: {
-    color: '#444',
-    fontSize: 16,
-  },
   balance: {
-    color: '#000',
-    fontSize: 24,
+    color: '#fff',
+    fontSize: 32,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 5,
+  },
+  balanceLabel: {
+    color: '#e0e0e0',
+    fontSize: 14,
+  },
+  sendButton: {
+    position: 'absolute',
+    right: 20,
+    top: 20,
+    backgroundColor: '#a767c6',
+    padding: 10,
+    borderRadius: 50,
+  },
+  searchContainer: {
+    backgroundColor: '#e0e0e0',
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
   },
   actionContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 20,
+    marginVertical: 10,
+  },
+  actionButton: {
+    backgroundColor: '#a767c6',
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionButtonLabel: {
+    color: '#fff',
+    fontSize: 14,
+    marginTop: 5,
   },
   cardContainer: {
     padding: 20,
@@ -169,11 +203,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#cccccc',
   },
-  button: {
+  footerButton: {
     borderRadius: 8,
     backgroundColor: '#ffffff',
     flex: 1,
     marginHorizontal: 5,
   },
 });
-
